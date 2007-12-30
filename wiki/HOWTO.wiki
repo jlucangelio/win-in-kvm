@@ -46,6 +46,8 @@ Use win-in-kvm!
 
 = TODO =
 
+  * Do not show Windows desktop, spawn VNC server.
+
   * Further shield user from QEMU commandline (Possibly using KVM Python script)
 
   * Check if the VM is already launched.

@@ -29,15 +29,13 @@ For example:
 
 > qemu-img create -f qcow2 win2003server.img 10G
 
-  * Fourth step:
-
-Make sure you have either Remote Desktop or Terminal Services active:
+  * Fourth step: make sure you have either Remote Desktop or Terminal Services active:
 
 Right click on 'My Computer' -> 'Remote' -> 'Enable Remote Desktop on this computer' -> 'Select remote users' -> Check if your user has permissions -> 'OK' -> 'OK' 
 
-  * Fifth step:
+  * Fifth step: make sure you have rdesktop installed!
 
-Use win-in-kvm!
+  * Sixth step: use win-in-kvm!
 
 > win-in-kvm.py add <name_of_vm> "-localtime <path_to_image> -m 512 -redir tcp:3389::3389 -redir udp:3389::3389 -net nic,model=rtl8139 -net user"
 
@@ -48,7 +46,7 @@ Use win-in-kvm!
 
   * Do not show Windows desktop, spawn VNC server.
 
-  * Further shield user from QEMU commandline (Possibly using KVM Python script)
+  * Further shield user from QEMU commandline (possibly using KVM Python script)
 
   * Check if the VM is already launched.
 

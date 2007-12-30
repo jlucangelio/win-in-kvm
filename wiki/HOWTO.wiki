@@ -9,15 +9,15 @@ Before anyone starts asking "Why don't you use WINE?", I can't. I can't use WINE
 
 = Details =
 
-  * First step: download and install KVM:
+  * *First step*: download and install KVM:
 
 kvm.qumranet.com
 
-  * Second step: make sure there's a way to run KVM without having to be root:
+  * *Second step*: make sure there's a way to run KVM without having to be root:
 
 http://kvm.qumranet.com/kvmwiki/FAQ#head-69bc2ce5da2f8fc4f1248afefd7bae00fa2dc277
 
-  * Third step: install Windows 2003 Server or any Windows with decent Terminal Services support (*make sure you are able to run KVM without being root*):
+  * *Third step*: install Windows 2003 Server or any Windows with decent Terminal Services support (*make sure you are able to run KVM without being root*):
 
 > qemu-system-x86_64 -cdrom <path_to_your_iso> -m 512 -localtime <path_to_your_image> -net nic,model=rtl8139 -net user
 
@@ -29,13 +29,13 @@ For example:
 
 > qemu-img create -f qcow2 win2003server.img 10G
 
-  * Fourth step: make sure you have either Remote Desktop or Terminal Services active:
+  * *Fourth step*: make sure you have either Remote Desktop or Terminal Services active:
 
 Right click on 'My Computer' -> 'Remote' -> 'Enable Remote Desktop on this computer' -> 'Select remote users' -> Check if your user has permissions -> 'OK' -> 'OK' 
 
-  * Fifth step: make sure you have rdesktop installed!
+  * *Fifth step*: make sure you have rdesktop installed!
 
-  * Sixth step: use win-in-kvm!
+  * *Sixth step*: use win-in-kvm!
 
 > win-in-kvm.py add <name_of_vm> "-localtime <path_to_image> -m 512 -redir tcp:3389::3389 -redir udp:3389::3389 -net nic,model=rtl8139 -net user"
 
@@ -45,6 +45,8 @@ Right click on 'My Computer' -> 'Remote' -> 'Enable Remote Desktop on this compu
 = TODO =
 
   * Do not show Windows desktop, spawn VNC server.
+
+  * Alert the user when the script is waiting.
 
   * Further shield user from QEMU commandline (possibly using KVM Python script)
 

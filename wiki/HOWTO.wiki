@@ -44,12 +44,10 @@ Right click on 'My Computer' -> 'Remote' -> 'Enable Remote Desktop on this compu
 
 = TODO =
 
-  * Do not show Windows desktop, spawn VNC server.
-
-  * Alert the user when the script is waiting.
-
   * Further shield user from QEMU commandline (possibly using KVM Python script)
 
-  * Check if the VM is already launched.
+  * Check if the VM is already launched
+
+  * Detect if VM has finished booting
 
   * Automate Windows install?

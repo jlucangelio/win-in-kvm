@@ -4,6 +4,7 @@ import sys
 import os
 import time
 import shelve
+import getpass
 
 import qemumonitor
 
@@ -12,7 +13,7 @@ vmdb = shelve.open("vmdbpy")
 argc = len(sys.argv)
 
 if argc < 2:
-	print "Usage: %s (add|rm|run) <name> [cmdline] [executable]" % sys.argv[0]
+	print "wik: Usage: %s (add|rm|run) <name> [cmdline] [executable]" % sys.argv[0]
 	sys.exit(1)
 
 cmdlilne = ""
@@ -28,26 +29,33 @@ elif sys.argv[1] == "rm" and argc >= 3:
 elif sys.argv[1] == "run" and argc >= 4:
 	cmdline = vmdb[sys.argv[2]]
 
+
+user = raw_input("wik: Windows username: ")
+passwd = getpass.getpass("wik: Windows password: ")
+
 telnet_port = 10000 + os.getpid()
 
-#cmdline = "qemu-system-x86_64 " + cmdline + " -monitor telnet:localhost:%d,server" % telnet_port
-cmdline = "qemu-system-x86_64 %s -monitor telnet:localhost:%d,server" % (cmdline, telnet_port)
-
-print cmdline
+cmdline = "qemu-system-x86_64 %s -monitor telnet:localhost:%d,server -vnc :1" % (cmdline, telnet_port)
 
 if not os.fork():
 	# child
 	os.system(cmdline)
 else:
 	# parent
+	print "wik: Launched VM"
 	time.sleep(1)
 
 	mon = qemumonitor.QEMUMonitor("localhost", telnet_port)
+	print "wik: Launched monitor"
+	print "wik: Waiting for VM boot"
 
-	time.sleep(60)
+	for i in range(6):
+		print "wik: %d seconds left" % (60 - i * 10)
+		time.sleep(10)
 
-	os.system("rdesktop -u Tamsyn -p - localhost -s \"%s\" -S standard -D" % sys.argv[3])
+	os.system("rdesktop -u %s -p %s localhost -s \"%s\" -S standard -D" % (user, passwd, sys.argv[3]))
 
-	mon.soft_poweroff("t4m5yn")
+	print "wik: Shutting down VM"
+	mon.soft_poweroff(passwd)
 
 	os.wait()

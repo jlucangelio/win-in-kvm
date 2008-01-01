@@ -50,4 +50,6 @@ Right click on 'My Computer' -> 'Remote' -> 'Enable Remote Desktop on this compu
 
   * Detect if VM has finished booting
 
+  * Provide a known working directory in Windows accessible from Linux
+
   * Automate Windows install?

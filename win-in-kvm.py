@@ -35,27 +35,23 @@ passwd = getpass.getpass("wik: Windows password: ")
 
 telnet_port = 10000 + os.getpid()
 
-cmdline = "qemu-system-x86_64 %s -monitor telnet:localhost:%d,server -vnc :1" % (cmdline, telnet_port)
+cmdline = "qemu-system-x86_64 %s -daemonize -monitor telnet:localhost:%d,server,nowait -vnc :1" % (cmdline, telnet_port)
 
-if not os.fork():
-	# child
-	os.system(cmdline)
-else:
-	# parent
-	print "wik: Launched VM"
-	time.sleep(1)
+os.system(cmdline)
+print "wik: Launched VM"
+time.sleep(1)
 
-	mon = qemumonitor.QEMUMonitor("localhost", telnet_port)
-	print "wik: Launched monitor"
-	print "wik: Waiting for VM boot"
+mon = qemumonitor.QEMUMonitor("localhost", telnet_port)
+print "wik: Launched monitor"
+print "wik: Waiting for VM boot"
 
-	for i in range(6):
-		print "wik: %d seconds left" % (60 - i * 10)
-		time.sleep(10)
+ten_secs_wait = 4
 
-	os.system("rdesktop -u %s -p %s localhost -s \"%s\" -S standard -D" % (user, passwd, sys.argv[3]))
+for i in range(ten_secs_wait):
+	print "wik: %d seconds left" % ((ten_secs_wait - i) * 10)
+	time.sleep(10)
 
-	print "wik: Shutting down VM"
-	mon.soft_poweroff(passwd)
+os.system("rdesktop -u %s -p %s localhost -s \"%s\" -S standard -D" % (user, passwd, sys.argv[3]))
 
-	os.wait()
+print "wik: Shutting down VM"
+mon.soft_poweroff(user, passwd)

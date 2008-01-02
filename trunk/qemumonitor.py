@@ -13,7 +13,7 @@ class QEMUMonitor:
 
 	def quit(self):
 		self.telnet_conn.write("quit\n")
-		self.telnet_conn.close()
+		self.close_conn()
 
 	def eject_device(self, device, force):
 		if force:
@@ -38,21 +38,29 @@ class QEMUMonitor:
 	def sendkey(self, key):
 		self.telnet_conn.write("sendkey %s\n" % key)
 
-	def soft_poweroff(self, password):
+	def sendword(self, word):
+		for letter in word:
+			key = ""
+
+			if letter.isupper():
+				key = "shift-" + letter.lower()
+			else:
+				key = letter
+
+			self.sendkey(key)
+			time.sleep(0.1)
+
+	def soft_poweroff(self, username, password):
 		self.sendkey("ctrl-alt-delete")
 
 		time.sleep(0.1)
 
-		for c in password:
-			key = ""
+		self.sendkey("shift-tab")
 
-			if c.isupper():
-				key = "shift-" + c
-			else:
-				key = c
+		self.sendword(username)
+		self.sendkey("tab")
 
-			self.sendkey(key)
-
+		self.sendword(password)
 		self.sendkey("ret")
 
 		time.sleep(10)
@@ -67,19 +75,24 @@ class QEMUMonitor:
 
 		for i in range(3):
 			self.sendkey("tab")
+			time.sleep(0.1)
 
-		self.sendkey("shift-h")
-
-		for c in "ypervisor":
-			self.sendkey(c)
-
+		self.sendword("Hypervisor")
+		
 		self.sendkey("ret")
+		
+		self.close_conn()
 
 	def hard_reboot(self): 
 		self.telnet_conn.write("system_reset\n")
+		self.close_conn()
 
 	def hard_poweroff(self):
 		self.telnet_conn.write("system_powerdown\n")
+		self.close_conn()
+	
+	def close_conn(self):
+		self.telnet_conn.close()
 
 # help|? [cmd] -- show the help
 # commit device|all -- commit changes to the disk images (if -snapshot is used) or backing files

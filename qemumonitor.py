@@ -50,44 +50,11 @@ class QEMUMonitor:
 			self.sendkey(key)
 			time.sleep(0.1)
 
-	def soft_poweroff(self, username, password):
-		self.sendkey("ctrl-alt-delete")
-
-		time.sleep(0.1)
-
-		self.sendkey("shift-tab")
-
-		self.sendword(username)
-		self.sendkey("tab")
-
-		self.sendword(password)
-		self.sendkey("ret")
-
-		time.sleep(10)
-
-		self.sendkey("ctrl-alt-delete")
-
-		time.sleep(0.1)
-
-		self.sendkey("alt-shift-s")
-
-		time.sleep(0.1)
-
-		for i in range(3):
-			self.sendkey("tab")
-			time.sleep(0.1)
-
-		self.sendword("Hypervisor")
-		
-		self.sendkey("ret")
-		
-		self.close_conn()
-
-	def hard_reboot(self): 
+	def reboot(self): 
 		self.telnet_conn.write("system_reset\n")
 		self.close_conn()
 
-	def hard_poweroff(self):
+	def poweroff(self):
 		self.telnet_conn.write("system_powerdown\n")
 		self.close_conn()
 	

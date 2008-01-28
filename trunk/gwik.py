@@ -188,15 +188,9 @@ class GWiK:
       info_dialog.hide()
 
       if res == 0:
-          mon.sendkey('ctrl-alt-delete')
-          time.sleep(1)
-          mon.sendkey('shift-tab')
-          mon.sendword(username_textbox.get_text().strip())
-          mon.sendkey('tab')
-          mon.sendword(password_textbox.get_text().strip())
-          mon.sendkey('ret')
-          time.sleep(10)
-          mon.poweroff()
+          os.system('rdesktop -u %s -p %s -s "shutdown -f -p -d p:4:1" localhost' \
+                        % (username_textbox.get_text().strip(),
+                           password_textbox.get_text().strip()))
 
           del model[path]
 
